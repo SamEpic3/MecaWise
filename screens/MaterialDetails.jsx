@@ -4,6 +4,7 @@ import { Divider } from 'react-native-paper';
 import { TextInput } from '../components/TextInput';
 import { Feather, Ionicons } from '@expo/vector-icons';
 import AppDataContext from "../contexts/AppDataContext";
+import { removeTrailingZeros } from '../utils/math';
 
 
 export default function MaterialDetails({ navigation, route }) {
@@ -14,11 +15,17 @@ export default function MaterialDetails({ navigation, route }) {
         hss: route.params.material.sfm.hss,
         carbide: route.params.material.sfm.carbide
     });
+    const [mMin, setMMin] = useState({ 
+        hss: route.params.material?.mMin?.hss,
+        carbide: route.params.material?.mMin?.carbide
+    });
     const [changeMade, setChangeMade] = useState(false);
 
     const labelInputRef = useRef(null);
     const sfmHSSInputRef = useRef(null);
     const sfmCarbideInputRef = useRef(null);
+    const mMinHSSInputRef = useRef(null);
+    const mMinCarbideInputRef = useRef(null);
 
     useEffect(() => {
         navigation.setOptions({
@@ -72,25 +79,21 @@ export default function MaterialDetails({ navigation, route }) {
 
     function handleLabelChange(text) {
         setLabel(text);
-        if(text.length >= 1) {
-            setChangeMade(true);
-        }
-        else {
-            setChangeMade(false);
-        }
+        text.length >= 1 ? setChangeMade(true) : setChangeMade(false);
     }
-
-    function handleSfmHSSChange(text) {
+    
+    function handleCutSpeedChange(text, unit, tool, removeZeros = false) {
         setChangeMade(true);
         if(!isNaN(+text) && text.length < 10) {
-            setsfm((previoussfm) => ({...previoussfm, hss: text}));
-        }
-    }
-
-    function handleSfmCarbideChange(text) {
-        setChangeMade(true);
-        if(!isNaN(+text) && text.length < 10) {
-            setsfm((previoussfm) => ({...previoussfm, carbide: text}));
+            let newCutSpeed = removeZeros && text > 0 ? removeTrailingZeros(+text).toString() : text;
+            if(unit == "sfm") {
+                setsfm((previoussfm) => ({ ...previoussfm, [tool]: newCutSpeed }));
+                setMMin((previousMMin) => ({ ...previousMMin, [tool]: newCutSpeed > 0 ? removeTrailingZeros(+newCutSpeed * 0.3048).toString() : "" }));
+            } 
+            else if(unit == "mMin") {
+                setsfm((previoussfm) => ({ ...previoussfm, [tool]: newCutSpeed > 0 ? removeTrailingZeros(+newCutSpeed / 0.3048).toString() : "" }));
+                setMMin((previousMMin) => ({ ...previousMMin, [tool]: newCutSpeed }));
+            }
         }
     }
 
@@ -99,10 +102,10 @@ export default function MaterialDetails({ navigation, route }) {
             let newData = [...previousData];
             let newLabel = label.length >= 1 ? label : "Sans nom";
             if(route.params.newMaterial) {
-                newData.push({ label: newLabel, sfm });
+                newData.push({ label: newLabel, sfm, mMin });
             }
             else {
-                newData[route.params.index] = { label: newLabel, sfm };
+                newData[route.params.index] = { label: newLabel, sfm, mMin };
             }
             return newData;
         });
@@ -145,32 +148,72 @@ export default function MaterialDetails({ navigation, route }) {
                             onChangeText={(text) => handleLabelChange(text)}
                             placeholder="Entrez un nom"
                             textAlign="right"
+                            maxLength={24}
                         />
                     </Pressable>
                     <Divider style={{ backgroundColor: "black" }}/>
+                    <Text style={styles.subTitleText}>SFM</Text>
+                    <Divider style={{ backgroundColor: "black" }}/>
                     <Pressable style={styles.itemPressable} onPress={() => sfmHSSInputRef.current.focus()}>
-                        <Text style={styles.itemText}>SFM (HSS)</Text>
+                        <Text style={styles.itemText}>HSS</Text>
                         <TextInput 
                             ref={sfmHSSInputRef}
                             keyboardType={"numeric"}
                             style={styles.textInput}
                             value={sfm.hss.toString()}
-                            onChangeText={(text) => handleSfmHSSChange(text)}
+                            onChangeText={(text) => handleCutSpeedChange(text, "sfm", "hss")}
                             placeholder="Entrez une valeur"
                             textAlign="right"
+                            maxLength={8}
+                            onEndEditing={(event) => handleCutSpeedChange(event.nativeEvent.text, "sfm", "hss", true)}
                         />
                     </Pressable>
                     <Divider style={{ backgroundColor: "black" }}/>
                     <Pressable style={styles.itemPressable} onPress={() => sfmCarbideInputRef.current.focus()}>
-                        <Text style={styles.itemText}>SFM (carbure)</Text>
+                        <Text style={styles.itemText}>Carbure</Text>
                         <TextInput 
                             ref={sfmCarbideInputRef}
                             keyboardType={"numeric"}
                             style={styles.textInput}
                             value={sfm.carbide.toString()}
-                            onChangeText={(text) => handleSfmCarbideChange(text)}
+                            onChangeText={(text) => handleCutSpeedChange(text, "sfm", "carbide")}
                             placeholder="Entrez une valeur"
                             textAlign="right"
+                            maxLength={8}
+                            onEndEditing={(event) => handleCutSpeedChange(event.nativeEvent.text, "sfm", "carbide", true)}
+                        />
+                    </Pressable>
+                    
+                    <Divider style={{ backgroundColor: "black" }}/>
+                    <Text style={styles.subTitleText}>Mètre/Minute</Text>
+                    <Divider style={{ backgroundColor: "black" }}/>
+                    <Pressable style={styles.itemPressable} onPress={() => mMinHSSInputRef.current.focus()}>
+                        <Text style={styles.itemText}>HSS</Text>
+                        <TextInput 
+                            ref={mMinHSSInputRef}
+                            keyboardType={"numeric"}
+                            style={styles.textInput}
+                            value={mMin.hss.toString()}
+                            onChangeText={(text) => handleCutSpeedChange(text, "mMin", "hss")}
+                            placeholder="Entrez une valeur"
+                            textAlign="right"
+                            maxLength={8}
+                            onEndEditing={(event) => handleCutSpeedChange(event.nativeEvent.text, "mMin", "hss", true)}
+                        />
+                    </Pressable>
+                    <Divider style={{ backgroundColor: "black" }}/>
+                    <Pressable style={styles.itemPressable} onPress={() => mMinCarbideInputRef.current.focus()}>
+                        <Text style={styles.itemText}>Carbure</Text>
+                        <TextInput 
+                            ref={mMinCarbideInputRef}
+                            keyboardType={"numeric"}
+                            style={styles.textInput}
+                            value={mMin.carbide.toString()}
+                            onChangeText={(text) => handleCutSpeedChange(text, "mMin", "carbide")}
+                            placeholder="Entrez une valeur"
+                            textAlign="right"
+                            maxLength={8}
+                            onEndEditing={(event) => handleCutSpeedChange(event.nativeEvent.text, "mMin", "carbide", true)}
                         />
                     </Pressable>
                 </ScrollView>
@@ -185,13 +228,23 @@ export default function MaterialDetails({ navigation, route }) {
                 </View>
                 <Divider style={{ backgroundColor: "black" }}/>
                 <View style={styles.itemPressable}>
-                    <Text style={styles.itemText}>SFM (HSS)</Text>
+                    <Text style={styles.itemText}>SFM - HSS</Text>
                     <Text style={styles.itemText}>{sfm.hss}</Text>
                 </View>
                 <Divider style={{ backgroundColor: "black" }}/>
                 <View style={styles.itemPressable}>
-                    <Text style={styles.itemText}>SFM (carbure)</Text>
+                    <Text style={styles.itemText}>SFM - carbure</Text>
                     <Text style={styles.itemText}>{sfm.carbide}</Text>
+                </View>
+                <Divider style={{ backgroundColor: "black" }}/>
+                <View style={styles.itemPressable}>
+                    <Text style={styles.itemText}>Mètre/min. - HSS</Text>
+                    <Text style={styles.itemText}>{sfm.hss * 0.3048}</Text>
+                </View>
+                <Divider style={{ backgroundColor: "black" }}/>
+                <View style={styles.itemPressable}>
+                    <Text style={styles.itemText}>Mètre/min. - carbure</Text>
+                    <Text style={styles.itemText}>{sfm.carbide * 0.3048}</Text>
                 </View>
             </ScrollView>
                 
@@ -212,10 +265,14 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         padding: 15
     },
+    subTitleText: {
+        fontSize: 21,
+        padding: 15
+    },
     itemText: {
-        fontSize: 19
+        fontSize: 16
     },
     textInput: {
-        fontSize: 19
+        fontSize: 16
     }
   });

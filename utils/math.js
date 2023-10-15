@@ -14,3 +14,6 @@ export function toRadians(angle) {
     return angle * (Math.PI / 180);
 }
   
+export function removeTrailingZeros(number) {
+    return parseFloat(number.toFixed(6));
+}

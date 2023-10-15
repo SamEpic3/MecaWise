@@ -26,7 +26,7 @@ export default function MaterialList({ navigation, route }) {
         navigation.navigate({
             name: "materialDetails", 
             params: { 
-                material: {label: "", sfm: {hss: "", carbide: ""}}, 
+                material: {label: "", sfm: {hss: "", carbide: ""}, mMin: {hss: "", carbide: ""}}, 
                 customMaterial: true,
                 newMaterial: true 
             }

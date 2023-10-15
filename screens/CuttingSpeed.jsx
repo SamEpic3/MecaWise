@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { StyleSheet, ScrollView, Text, View, Touchable, Pressable } from 'react-native';
+import { StyleSheet, ScrollView, Text, View, Pressable } from 'react-native';
 import { SegmentedButtons, TextInput, useTheme } from 'react-native-paper';
 import { roundXDec } from "../utils/math";
 import AppDataContext from "../contexts/AppDataContext";
@@ -89,7 +89,7 @@ export default function CuttingSpeed({ navigation, route }) {
     useEffect(() => {
       let newRpm = "";
       if(!isNaN(diameter) && diameter > 0 && material.sfm[tool] >= 1) {
-        newRpm = 4 * material.sfm[tool] / (diameter / unitsModifier[units]);
+        newRpm = Math.round((12 * material.sfm[tool]) / (Math.PI * (diameter / unitsModifier[units])));
         if(newRpm > 100000) newRpm = 100000;
         setRpm(roundXDec(newRpm, 3));
       }
@@ -139,7 +139,7 @@ export default function CuttingSpeed({ navigation, route }) {
             value={diameter}
         />
         {rpm !== "" && <Text style={styles.rpmText}>{rpm} rpm</Text>}
-        {material.sfm[tool] < 1 && <Text style={styles.rpmText}>SFM non défini pour ce matériau avec cet outil</Text>}
+        {material.sfm[tool] <= 0 && <Text style={styles.rpmText}>Vitesse de coupe non définie pour ce matériau avec cet outil</Text>}
       </ScrollView>
     );
   }
