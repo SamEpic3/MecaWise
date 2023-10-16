@@ -1,0 +1,10 @@
+This application does not collect or store personal data.
+
+If you installed this application from Google Play, then Google Play does collect some personal data. Please see the privacy policy for Google Play Services here: https://policies.google.com/privacy
+
+----------
+
+Cette application ne collecte ou n'enregistre aucune donnée personnelle.
+
+Si vous avez installé cette application depuis Google Play, alors Google Play collecte quelques données personnelles. Veuillez consulter les règles de confidentialité
+pour Google Play Services ici : https://policies.google.com/privacy
