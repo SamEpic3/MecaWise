@@ -4,12 +4,13 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from "./screens/HomeScreen";
 import Pythagore from "./screens/Pythagore";
-import Conversion from "./screens/Conversion";
+import Conversion from "./screens/Conversion/Conversion";
 import Scale from "./screens/Scale";
-import CuttingSpeed from "./screens/CuttingSpeed";
-import MaterialList from "./screens/MaterialList";
-import MaterialDetails from "./screens/MaterialDetails";
-import CuttingSpeedHelp from './screens/CuttingSpeedHelp';
+import CuttingSpeed from "./screens/CuttingSpeed/CuttingSpeed";
+import MaterialList from "./screens/CuttingSpeed/MaterialList";
+import MaterialDetails from "./screens/CuttingSpeed/MaterialDetails";
+import CuttingSpeedHelp from './screens/CuttingSpeed/CuttingSpeedHelp';
+import ConversionHelp from './screens/Conversion/ConversionHelp';
 import { getCuttingSpeedData, storeCuttingSpeedData, getSettings, storeSettings } from "./utils/localstorage";
 import { MD3LightTheme as DefaultTheme, Provider as PaperProvider } from "react-native-paper";
 import color from "color";
@@ -97,6 +98,13 @@ export default function App() {
               component={Conversion} 
               options={{
                 title: "Conversion de signaux"
+              }}
+            />
+            <Stack.Screen 
+              name="conversionHelp"
+              component={ConversionHelp} 
+              options={{
+                title: "Conversion de signaux - Aide"
               }}
             />
             <Stack.Screen 

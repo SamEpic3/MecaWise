@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import { ScrollView, StyleSheet, Text } from "react-native";
-import { ExpandableCard } from "../components/ExpandableCard";
+import { ExpandableCard } from "../../components/ExpandableCard";
 import { Divider } from "react-native-paper";
 
 export default function CuttingSpeedHelp() {

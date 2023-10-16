@@ -1,9 +1,9 @@
 import { useState, useEffect, useContext } from "react";
 import { StyleSheet, ScrollView, Text, View, Pressable } from 'react-native';
 import { SegmentedButtons, TextInput, useTheme } from 'react-native-paper';
-import { roundXDec } from "../utils/math";
-import AppDataContext from "../contexts/AppDataContext";
-import { defaultMaterialOptions } from "../utils/defaultCuttingSpeeds";
+import { roundXDec } from "../../utils/math";
+import AppDataContext from "../../contexts/AppDataContext";
+import { defaultMaterialOptions } from "../../utils/defaultCuttingSpeeds";
 import { Feather } from '@expo/vector-icons';
 
 export default function CuttingSpeed({ navigation, route }) {

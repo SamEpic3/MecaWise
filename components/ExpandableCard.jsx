@@ -2,7 +2,7 @@ import { useState } from "react";
 import { View, Pressable, StyleSheet } from "react-native";
 import { Feather } from '@expo/vector-icons';
 
-export function ExpandableCard(props) {
+export const ExpandableCard = (props) => {
 
     const [isExpanded, setIsExpanded] = useState(false);
 

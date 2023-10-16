@@ -1,10 +1,10 @@
 import { useState, useEffect, useContext, useRef } from 'react';
 import { View, StyleSheet, ScrollView, Text, Pressable, BackHandler, Alert} from 'react-native';
 import { Divider } from 'react-native-paper';
-import { TextInput } from '../components/TextInput';
+import { TextInput } from '../../components/TextInput';
 import { Feather, Ionicons } from '@expo/vector-icons';
-import AppDataContext from "../contexts/AppDataContext";
-import { removeTrailingZeros } from '../utils/math';
+import AppDataContext from "../../contexts/AppDataContext";
+import { removeTrailingZeros } from '../../utils/math';
 
 
 export default function MaterialDetails({ navigation, route }) {

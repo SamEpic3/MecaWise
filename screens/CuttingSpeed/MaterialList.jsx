@@ -1,8 +1,8 @@
 import { useContext, useState, useEffect } from 'react';
 import { StyleSheet, ScrollView, Pressable } from 'react-native';
 import { Divider, List } from "react-native-paper";
-import { defaultMaterialOptions } from "../utils/defaultCuttingSpeeds";
-import AppDataContext from '../contexts/AppDataContext';
+import { defaultMaterialOptions } from "../../utils/defaultCuttingSpeeds";
+import AppDataContext from '../../contexts/AppDataContext';
 
 export default function MaterialList({ navigation, route }) {
     const { data, setData } = useContext(AppDataContext);
